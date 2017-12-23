@@ -1,0 +1,97 @@
+void savebook()
+{
+    scanbooks();
+    int i;
+    FILE *ptrB,*ptrBN;
+    ptrB=fopen("Books.txt","r");
+    ptrBN=fopen("Booksnew.txt","a");
+    if (ptrB==NULL)
+    {
+        printf("Error: File not found!\a");
+        exit(1);
+    }
+    else
+    {
+        for(i=0; i<counter; i++)
+        {
+            if (book[i].del==0 && i==0)
+                fprintf(ptrBN,"%s,%s,%s,%d,%d,%d,,%s,%s,%d,%d",book[i].title,book[i].author,book[i].publisher,
+                        &book[i].D.day,&book[i].D.month,&book[i].D.year,book[i].ISBN,book[i].category,book[i].copies,book[i].currentCopies);
+            else if (book[i].del==0)
+                fprintf(ptrBN,"%s,%s,%s,%d,%d,%d,,%s,%s,%d,%d",book[i].title,book[i].author,book[i].publisher,
+                        &book[i].D.day,&book[i].D.month,&book[i].D.year,book[i].ISBN,book[i].category,book[i].copies,book[i].currentCopies);
+
+        }
+        rewind(ptrBN);
+        fclose(ptrB);
+        fclose(ptrBN);
+        remove("Books.txt");
+        rename("Booksnew.txt","Books.txt");
+        printf("\n\nChanges Saved Successfully\n\n");
+    }
+}
+void savemember()
+{   scanmembers();
+    int i;
+    FILE *ptrM,*ptrMN;
+    ptrM=fopen("Members.txt","r");
+    ptrMN=fopen("Membersnew.txt","a");
+    if (ptrM==NULL)
+    {
+        printf("Error: File not found!\a");
+        exit(1);
+    }
+    else
+    {
+        for(i=3; i<counter; i++)
+        {
+            if (member[i].del==0)
+            {
+                fprintf(ptrMN,"%s %s,%d,%s,0%d,%d,%s",member[i].firstname,member[i].lastname,member[i].ID,member[i].adress,member[i].phone,member[i].age,member[i].email,member[i].borrowcount);
+            }
+        }
+        rewind(ptrMN);
+        fclose(ptrM);
+        fclose(ptrMN);
+        remove("Members.txt");
+        rename("Membersnew.txt","Members.txt");
+
+    }
+}
+void saveborrow()
+{
+    scanborrows();
+    int i;
+    FILE *ptrBorrow,*ptrBorrowN;
+    ptrBorrow=fopen("Borrows.txt","r");
+    ptrBorrowN=fopen("Borrownew.txt","a");
+    if (ptrBorrow==NULL)
+    {
+        printf("Error: File not found!\a");
+        exit(1);
+    }
+    else
+    {
+        for(i=5; i<counter; i++)
+        {
+            if (borrow[i].del==0)
+            {
+                fprintf(ptrBorrowN,"%s,%d,%d/%d/%d,%d/%d/%d,%d/%d/%d",borrow[i].ISBN,borrow[i].ID,
+                        borrow[i].borrowed.day,borrow[i].borrowed.month,borrow[i].borrowed.year,
+                        borrow[i].due.day,borrow[i].due.month,borrow[i].due.year,
+                        borrow[i].returned.day,borrow[i].returned.month,borrow[i].returned.year);
+            }
+        }
+        rewind(ptrBorrowN);
+        fclose(ptrBorrowN);
+        fclose(ptrBorrow);
+        remove("Borrows.txt");
+        rename("Borrownew.txt","Borrows.txt");
+    }
+}
+void save()
+{
+    savebook();
+    savemember();
+    saveborrow();
+}
